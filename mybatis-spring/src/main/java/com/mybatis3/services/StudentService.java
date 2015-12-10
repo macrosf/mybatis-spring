@@ -9,27 +9,17 @@ import com.mybatis3.domain.Student;
 import com.mybatis3.mappers.AddressMapper;
 import com.mybatis3.mappers.StudentMapper;
 
-//@Service
-//@Transactional
+@Service
+@Transactional
 public class StudentService {
-	//@Autowired
+	@Autowired
     private StudentMapper studentMapper; 
-	//@Autowired
+	@Autowired
     private AddressMapper addressMapper;
-    
-    public void setStudentMapper (StudentMapper studentMapper) 
-    { 
-        this. studentMapper = studentMapper; 
-    } 
-    
-    public void setAddressMapper (AddressMapper addressMapper) 
-    { 
-        this. addressMapper = addressMapper; 
-    } 
     
     public Student findStudentById(Integer id) 
     { 
-        return this.studentMapper.findStudentById(id);  
+        return studentMapper.findStudentById(id);  
     }
     
 	public Student createStudent(Student student) {

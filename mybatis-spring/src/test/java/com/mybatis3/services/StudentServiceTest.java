@@ -15,7 +15,7 @@ import com.mybatis3.domain.Student;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath:applicationContext.xml")
 public class StudentServiceTest {
-	//@Autowired
+	@Autowired
 	private StudentService studentService;
 
 	public void setStudentService(StudentService studentService) {
@@ -25,7 +25,7 @@ public class StudentServiceTest {
 	@Test
 	public void testCreatStudent() {
 		
-		Address address = new Address(5, "Quaker Ridge Rd.", "Bethel", "Brooklyn", "06801", "USA"); 
+		Address address = new Address(1, "Quaker Ridge Rd.", "Bethel", "Brooklyn", "06801", "USA"); 
 		Student stud = new Student(); 
 		long ts = System.currentTimeMillis(); 
 		stud.setName("stud_" + ts); 

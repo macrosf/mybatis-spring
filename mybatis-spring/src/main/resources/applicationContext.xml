@@ -14,16 +14,13 @@
 						http://www.springframework.org/schema/context/spring-context.xsd
 						http://www.springframework.org/schema/tx 
 						http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
-						http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring.xsd">
+						http://mybatis.org/schema/mybatis-spring 
+						http://mybatis.org/schema/mybatis-spring.xsd">
 
-<!-- 使用注释的方式注入 
-  <context:annotation-config />	 						
-  <context:component-scan base-package="com.mybatis3" />
---> 
+	<!-- 使用注释的方式注入 --> 
+	 <context:annotation-config />	 						
+	 <context:component-scan base-package="com.mybatis3" />
 
-	<bean id="studentServiceTest" class="com.mybatis3.services.StudentServiceTest">
-		<property name="studentService" ref="studentService" />
-	</bean>
   	<!--  Spring的基于注解的事务处理  begin -->
 	<!--  需要在Spring service bean(@Service) 上配合使用@Transactional 注解 -->
     <tx:annotation-driven transaction-manager="transactionManager"/>
@@ -44,7 +41,6 @@
   
 	<!-- 定义数据库连接信息方法二：将数据库连接信息定义在外部配置文件中 begin -->
 	<context:property-placeholder location="classpath:application.properties"/>
-  
 	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource"> 
 	  <property name="driverClassName" value="${jdbc.driverClassName}" /> 
 	  <property name="url" value="${jdbc.url}" /> 
@@ -62,9 +58,9 @@
 	  <property name="dataSource" ref="dataSource" /> 
 	  <!-- 2.1.5 类型别名 typeAliases  -->
 	  <!-- 你可以不用为每一个 JavaBean单独定义别名, 你可以为提供需要取别名的 JavaBean 所在的包(package)，MyBatis
-	会自动扫描包内定义的 JavaBeans，然后分别为 JavaBean 注册一个小写字母开头的非完全限定的类名形式的别名。
-	如下所示 -->
-	  <property name="typeAliases" value="com.mybatis3.domain.Student, com.mybatis3.domain.Tutor" /> 
+		会自动扫描包内定义的 JavaBeans，然后分别为 JavaBean 注册一个小写字母开头的非完全限定的类名形式的别名。
+		如下所示 -->
+	  <!-- <property name="typeAliases" value="com.mybatis3.domain.Student, com.mybatis3.domain.Tutor" /> --> 
 	  <!-- typeAliasesPackage指定了一系列包名列表，用逗号隔开，包内含有需要创建别名的 JavaBeans -->
 	  <property name="typeAliasesPackage" value="com.mybatis3.domain" /> 
 	  
@@ -72,12 +68,12 @@
 	  <!-- typeHandlersPackage指定了一系列包名列表，用逗号隔开，包内含有需要被注册的类型处理器类 -->
 	  <!-- <property name="typeHandlersPackage" value="com.mybatis3.typehandlers" /> -->
 	  
-	  <!-- 注入Mapper方式一（配合@Autowired使用）  -->
-	  <!--  mapperLocations指定了 SQL映射器 Mapper XML 配置文件的位置 -->
-	  <!-- <property name="mapperLocations" value="classpath*:com/mybatis3/**/*.xml" /> --> 
+	  <!--  mapperLocations指定了 SQL映射器 Mapper XML 配置文件的位置 
+	  <property name="mapperLocations" value="classpath*:com/mybatis3/**/*.xml" /> 
+	  --> 
 	</bean> 
  
- 	<!-- 注入Mapper方式二：单个注入Mapper时，使用MapperFactoryBean，定义每一个Mapper bean -->
+ 	<!-- 注入Mapper方式一：单个注入Mapper时，使用MapperFactoryBean，定义每一个Mapper bean
 	<bean id="studentMapper" class="org.mybatis.spring.mapper.MapperFactoryBean"> 
 	  <property name="mapperInterface" value="com.mybatis3.mappers.StudentMapper" /> 
 	  <property name="sqlSessionFactory" ref="sqlSessionFactory" /> 
@@ -87,18 +83,20 @@
 	  <property name="mapperInterface" value="com.mybatis3.mappers.AddressMapper" /> 
 	  <property name="sqlSessionFactory" ref="sqlSessionFactory" /> 
 	</bean> 		
-	
+	-->
+ 	
+ 	<!-- 使用注入Mapper方式一时，将定义的Mapper bean注入Service bean
+	<bean id="studentService" class="com.mybatis3.services.StudentService"> 
+	  <property name="studentMapper" ref="studentMapper" /> 
+	</bean> 	
+	-->
+			
 	<!-- 注入Mapper方式二：批量注入Mapper时，使用MapperScannerConfigurer 
  		<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer"> 
 		  <property name="basePackage" value="com.mybatis3.mappers" /> 
 		</bean> 	
 	 -->
  
- 	<!-- 使用注入Mapper方式二时，将定义的Mapper bean注入Service bean-->
-	<bean id="studentService" class="com.mybatis3.services.StudentService"> 
-	  <property name="studentMapper" ref="studentMapper" /> 
-	</bean> 	
-	
 	<!-- MyBatis-Spring-1.2.0介绍了两种新的扫描映射器 Mapper接口的方法：  
 		● 使用<mybatis:scan/>元素 
   	● 使用@MapperScan 注解（需 Spring3.1+版本） <-参考项目mybatis3-chapter05的AppConfig.java
@@ -115,5 +113,12 @@
 	        http://mybatis.org/schema/mybatis-spring.xsd"> 
 	    <mybatis:scan base-package="com.mybatis3.mappers" /> 		<-关键点
 	</beans>  
+	-->
+	<mybatis:scan base-package="com.mybatis3.mappers" />
+	
+	<!-- 尝试使用xml配置的方式将service bean注入TestCase，但是没有成功
+	<bean id="studentServiceTest" class="com.mybatis3.services.StudentServiceTest">
+		<property name="studentService" ref="studentService" />
+	</bean>
 	-->
 </beans> 
